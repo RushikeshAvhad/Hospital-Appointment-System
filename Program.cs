@@ -10,6 +10,7 @@ namespace HospitalAppointment
 {
     public class Program
     {
+        static List<Appointment> appointments = new List<Appointment>();
         static void Main(string[] args)
         {
             Console.WriteLine("Welcome to the Appointment Booking System");
@@ -95,6 +96,24 @@ namespace HospitalAppointment
                     return;
                 }
             }
+
+            if (IsDoctorAlreadyBookedOnDate(doctorName, appointmentDate))
+            {
+                Console.WriteLine("Doctor already has an appointment. Cannot make another appointment.");
+                return;
+            }
+        }
+
+        private static bool IsDoctorAlreadyBookedOnDate(string doctorName, DateTime appointmentDate)
+        {
+            foreach (var appointment in appointments)
+            {
+                if (appointment.DoctorName == doctorName && appointment.AppointmentDate == appointmentDate)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         private static bool IsDoctorNamePresent(string doctorName, string csvFilePath)
