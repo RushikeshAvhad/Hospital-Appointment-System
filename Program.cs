@@ -66,7 +66,7 @@ namespace HospitalAppointment
                 Console.WriteLine("Hospital Not Found.");
             }
 
-            Console.WriteLine("Enter Doctor Name: ");
+            Console.Write("Enter Doctor Name: ");
             string doctorName = Console.ReadLine().ToLower().Replace(" ", "");
 
             if (IsDoctorNamePresent(doctorName, "D:\\Avhad Rushikesh\\Doctor.csv"))
@@ -183,7 +183,7 @@ namespace HospitalAppointment
             }
 
             //  print table header
-            Console.WriteLine("{0,-20} {1,-20}, {2,-20}", "Hospital Name", "Doctor Name", "Appointment Date");
+            Console.WriteLine("{0,-20} {1,-20} {2,-20}", "Hospital Name", "Doctor Name", "Appointment Date");
 
             //  print table seperator
             Console.WriteLine(new string('-', 62));
