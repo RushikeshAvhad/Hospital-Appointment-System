@@ -76,6 +76,25 @@ namespace HospitalAppointment
             {
                 Console.WriteLine("Doctor Not Found.");
             }
+
+            Console.Write("Enter Appointment Date (YYYY-MM-DD): ");
+            string appointmentDateStr = Console.ReadLine();
+
+            DateTime appointmentDate;
+            if (!DateTime.TryParse(appointmentDateStr, out appointmentDate))
+            {
+                Console.WriteLine("Invalid date format. Please enter in YYYY-MM-DD format.");
+                return;
+            }
+            else
+            {
+                string dayName = appointmentDate.DayOfWeek.ToString();
+                if (dayName.ToLower() == "saturday" || dayName.ToLower() == "sunday")
+                {
+                    Console.WriteLine("Appointment Cannot be book on Saturday or Sunday");
+                    return;
+                }
+            }
         }
 
         private static bool IsDoctorNamePresent(string doctorName, string csvFilePath)
