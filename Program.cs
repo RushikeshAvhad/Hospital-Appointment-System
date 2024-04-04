@@ -57,7 +57,7 @@ namespace HospitalAppointment
             Console.Write("Enter Hospital Name: ");
             string hospitalName = Console.ReadLine().ToLower().Replace(" ", "");
 
-            if (IsHospitalNamePresent(hospitalName, "D:\\Avhad Rushikesh\\Hospital.csv"))
+            if (IsHospitalNamePresent(hospitalName, "D:\\Avhad Rushikesh\\Hospital-Appointment-System\\Hospital.csv"))
             {
                 Console.WriteLine("Hospital Found!");
             }
@@ -69,7 +69,7 @@ namespace HospitalAppointment
             Console.Write("Enter Doctor Name: ");
             string doctorName = Console.ReadLine().ToLower().Replace(" ", "");
 
-            if (IsDoctorNamePresent(doctorName, "D:\\Avhad Rushikesh\\Doctor.csv"))
+            if (IsDoctorNamePresent(doctorName, "D:\\Avhad Rushikesh\\Hospital-Appointment-System\\Doctor.csv"))
             {
                 Console.WriteLine("Doctor Found!");
             }
