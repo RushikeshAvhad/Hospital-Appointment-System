@@ -162,7 +162,25 @@ namespace HospitalAppointment
 
         private static void ShowAllAppointment()
         {
-            throw new NotImplementedException();
+            Console.WriteLine("\nAll Booked Appointments Details:");
+
+            if (appointments.Count == 0)
+            {
+                Console.WriteLine("No Appointment Booked Yet.");
+                return;
+            }
+
+            //  print table header
+            Console.WriteLine("{0,-20} {1,-20}, {2,-20}", "Hospital Name", "Doctor Name", "Appointment Date");
+
+            //  print table seperator
+            Console.WriteLine(new string('-', 62));
+
+            //  print appointment details
+            foreach (Appointment appointment in appointments)
+            {
+                Console.WriteLine("{0,-20} {1,-20} {2,-20}", appointment.HospitalName, appointment.DoctorName, appointment.AppointmentDate);
+            }
         }
     }
 }
