@@ -78,14 +78,48 @@ namespace HospitalAppointment
             }
         }
 
-        private static bool IsDoctorNamePresent(string doctorName, string v)
+        private static bool IsDoctorNamePresent(string doctorName, string csvFilePath)
         {
-            throw new NotImplementedException();
+            if (File.Exists(csvFilePath))
+            {
+                using (StreamReader reader = new StreamReader(csvFilePath))
+                {
+                    string line;
+                    while ((line = reader.ReadLine()) != null)
+                    {
+                        string[] fields = line.Split(',');
+                        string csvName = fields[1].ToLower().Replace(" ", "");
+
+                        if(csvName == doctorName)
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
         }
 
-        private static bool IsHospitalNamePresent(string hospitalName, string v)
+        private static bool IsHospitalNamePresent(string hospitalName, string csvFilePath)
         {
-            throw new NotImplementedException();
+            if (File.Exists(csvFilePath))
+            {
+                using (StreamReader reader = new StreamReader(csvFilePath))
+                {
+                    string line;
+                    while ((line = reader.ReadLine()) != null)
+                    {
+                        string[] fields = line.Split(',');
+                        string csvName = fields[1].ToLower().Replace(" ", "");
+
+                        if (csvName == hospitalName)
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
         }
 
         private static void ShowAllAppointment()
