@@ -57,7 +57,7 @@ namespace HospitalAppointment
             Console.Write("Enter Hospital Name: ");
             string hospitalName = Console.ReadLine().ToLower().Replace(" ", "");
 
-            if (IsHospitalNamePresent(hospitalName, "D:\\AvhadRushikesh\\Hospital.csv"))
+            if (IsHospitalNamePresent(hospitalName, "D:\\Avhad Rushikesh\\Hospital.csv"))
             {
                 Console.WriteLine("Hospital Found!");
             }
@@ -69,7 +69,7 @@ namespace HospitalAppointment
             Console.WriteLine("Enter Doctor Name: ");
             string doctorName = Console.ReadLine().ToLower().Replace(" ", "");
 
-            if (IsDoctorNamePresent(doctorName, "D:\\AvhadRushikesh\\Doctor.csv"))
+            if (IsDoctorNamePresent(doctorName, "D:\\Avhad Rushikesh\\Doctor.csv"))
             {
                 Console.WriteLine("Doctor Found!");
             }
@@ -102,6 +102,18 @@ namespace HospitalAppointment
                 Console.WriteLine("Doctor already has an appointment. Cannot make another appointment.");
                 return;
             }
+
+            //  Create an appointment object and store it in the list
+            Appointment newAppointment = new Appointment(hospitalName, doctorName, appointmentDate);
+            appointments.Add(newAppointment);
+
+            Console.WriteLine("Appointment booked Successfully!");
+
+            Console.WriteLine("\nAppointment Details:");
+            Console.WriteLine("Hospital Name: " + newAppointment.HospitalName);
+            Console.WriteLine("Doctor Name: " + newAppointment.DoctorName);
+            Console.WriteLine("Appointment Date: " +newAppointment.AppointmentDate.ToString("yyyy-MM-dd"));
+
         }
 
         private static bool IsDoctorAlreadyBookedOnDate(string doctorName, DateTime appointmentDate)
