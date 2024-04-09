@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
-using Microsoft.VisualBasic.FileIO;
+using System.Linq;
 
 namespace HospitalAppointment
 {
     public class Program
     {
         static List<Appointment> appointments = new List<Appointment>();
+        static Dictionary<string, string> doctorIndexDictionary = LoadDoctorIndex("D:\\Avhad Rushikesh\\Hospital-Appointment-System\\Doctor.csv");
+
+
         static void Main(string[] args)
-        {
+        {            
             Console.WriteLine("Welcome to the Appointment Booking System");
 
             while(true)
@@ -53,7 +53,6 @@ namespace HospitalAppointment
         {
             Console.WriteLine("\nBook an Appointment");
 
-            //  Accept user input for Hospital Name
             Console.Write("Enter Hospital Name: ");
             string hospitalName = Console.ReadLine().ToLower().Replace(" ", "");
 
@@ -64,19 +63,42 @@ namespace HospitalAppointment
             else
             {
                 Console.WriteLine("Hospital Not Found.");
+                return;
             }
 
             Console.Write("Enter Doctor Name: ");
             string doctorName = Console.ReadLine().ToLower().Replace(" ", "");
 
-            if (IsDoctorNamePresent(doctorName, "D:\\Avhad Rushikesh\\Hospital-Appointment-System\\Doctor.csv"))
+
+
+            #region Check if Doctor Name is present in CSV file by reading file each time
+
+            //if (IsDoctorNamePresent(doctorName, "D:\\Avhad Rushikesh\\Hospital-Appointment-System\\Doctor.csv"))
+            //{
+            //    Console.WriteLine("Doctor Found!");
+            //}
+            //else
+            //{
+            //    Console.WriteLine("Doctor Not Found.");
+            //    return;
+            //}
+
+            #endregion
+
+            #region Check If Doctor Name is Present in the CSV File (Doctor Dictionary)
+
+            //  Search the index for the given doctor's name
+            if (doctorIndexDictionary.ContainsKey(doctorName))
             {
                 Console.WriteLine("Doctor Found!");
             }
             else
             {
-                Console.WriteLine("Doctor Not Found.");
+                Console.WriteLine("Doctor not found.");
+                return;
             }
+
+            #endregion
 
             Console.Write("Enter Appointment Date (YYYY-MM-DD): ");
             string appointmentDateStr = Console.ReadLine();
@@ -97,6 +119,7 @@ namespace HospitalAppointment
                 }
             }
 
+            //  Check if doctor has appointment for same requested date
             if (IsDoctorAlreadyBookedOnDate(doctorName, appointmentDate))
             {
                 Console.WriteLine("Doctor already has an appointment. Cannot make another appointment.");
@@ -128,6 +151,7 @@ namespace HospitalAppointment
             return false;
         }
 
+        #region Check if Doctor Name is present in the CSV file
         private static bool IsDoctorNamePresent(string doctorName, string csvFilePath)
         {
             if (File.Exists(csvFilePath))
@@ -149,6 +173,7 @@ namespace HospitalAppointment
             }
             return false;
         }
+        #endregion
 
         private static bool IsHospitalNamePresent(string hospitalName, string csvFilePath)
         {
@@ -193,6 +218,30 @@ namespace HospitalAppointment
             {
                 Console.WriteLine("{0,-20} {1,-20} {2,-20}", appointment.HospitalName, appointment.DoctorName, appointment.AppointmentDate);
             }
+        }
+
+        static Dictionary<string, string> LoadDoctorIndex(string filePath)
+        {
+            Dictionary<string, string> doctorIndex = new Dictionary<string, string>();
+
+            //  Read CSV file and create index
+            using (var reader = new StreamReader(filePath))
+            {
+                while (!reader.EndOfStream)
+                {
+                    var line = reader.ReadLine();
+                    var values = line.Split(',');
+
+                    //  Assuming the second column contains doctor names
+                    string doctorName = values[1];
+                    string doctorNameByInLowerCase = doctorName.ToLower().Replace(" ","");
+                    string doctorRecord = string.Join(",", values.Skip(0)); //  Store entire record
+
+                    doctorIndex[doctorNameByInLowerCase] = doctorRecord;
+                }
+            }
+
+            return doctorIndex;
         }
     }
 }
