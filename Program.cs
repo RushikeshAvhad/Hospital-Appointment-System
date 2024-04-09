@@ -9,8 +9,9 @@ namespace HospitalAppointment
     {
         static List<Appointment> appointments = new List<Appointment>();
         static Dictionary<string, string> doctorIndexDictionary = LoadDoctorIndex("D:\\Avhad Rushikesh\\Hospital-Appointment-System\\Doctor.csv");
+        static Dictionary<string, string> hospitalIndexDictionary = LoadHospitalIndex("D:\\Avhad Rushikesh\\Hospital-Appointment-System\\Hospital.csv");
 
-
+        
         static void Main(string[] args)
         {            
             Console.WriteLine("Welcome to the Appointment Booking System");
@@ -56,7 +57,7 @@ namespace HospitalAppointment
             Console.Write("Enter Hospital Name: ");
             string hospitalName = Console.ReadLine().ToLower().Replace(" ", "");
 
-            if (IsHospitalNamePresent(hospitalName, "D:\\Avhad Rushikesh\\Hospital-Appointment-System\\Hospital.csv"))
+            if (hospitalIndexDictionary.ContainsKey(hospitalName))
             {
                 Console.WriteLine("Hospital Found!");
             }
@@ -70,24 +71,6 @@ namespace HospitalAppointment
             string doctorName = Console.ReadLine().ToLower().Replace(" ", "");
 
 
-
-            #region Check if Doctor Name is present in CSV file by reading file each time
-
-            //if (IsDoctorNamePresent(doctorName, "D:\\Avhad Rushikesh\\Hospital-Appointment-System\\Doctor.csv"))
-            //{
-            //    Console.WriteLine("Doctor Found!");
-            //}
-            //else
-            //{
-            //    Console.WriteLine("Doctor Not Found.");
-            //    return;
-            //}
-
-            #endregion
-
-            #region Check If Doctor Name is Present in the CSV File (Doctor Dictionary)
-
-            //  Search the index for the given doctor's name
             if (doctorIndexDictionary.ContainsKey(doctorName))
             {
                 Console.WriteLine("Doctor Found!");
@@ -97,8 +80,6 @@ namespace HospitalAppointment
                 Console.WriteLine("Doctor not found.");
                 return;
             }
-
-            #endregion
 
             Console.Write("Enter Appointment Date (YYYY-MM-DD): ");
             string appointmentDateStr = Console.ReadLine();
@@ -151,52 +132,6 @@ namespace HospitalAppointment
             return false;
         }
 
-        #region Check if Doctor Name is present in the CSV file
-        private static bool IsDoctorNamePresent(string doctorName, string csvFilePath)
-        {
-            if (File.Exists(csvFilePath))
-            {
-                using (StreamReader reader = new StreamReader(csvFilePath))
-                {
-                    string line;
-                    while ((line = reader.ReadLine()) != null)
-                    {
-                        string[] fields = line.Split(',');
-                        string csvName = fields[1].ToLower().Replace(" ", "");
-
-                        if(csvName == doctorName)
-                        {
-                            return true;
-                        }
-                    }
-                }
-            }
-            return false;
-        }
-        #endregion
-
-        private static bool IsHospitalNamePresent(string hospitalName, string csvFilePath)
-        {
-            if (File.Exists(csvFilePath))
-            {
-                using (StreamReader reader = new StreamReader(csvFilePath))
-                {
-                    string line;
-                    while ((line = reader.ReadLine()) != null)
-                    {
-                        string[] fields = line.Split(',');
-                        string csvName = fields[1].ToLower().Replace(" ", "");
-
-                        if (csvName == hospitalName)
-                        {
-                            return true;
-                        }
-                    }
-                }
-            }
-            return false;
-        }
-
         private static void ShowAllAppointment()
         {
             Console.WriteLine("\nAll Booked Appointments Details:");
@@ -234,14 +169,34 @@ namespace HospitalAppointment
 
                     //  Assuming the second column contains doctor names
                     string doctorName = values[1];
-                    string doctorNameByInLowerCase = doctorName.ToLower().Replace(" ","");
+                    string doctorNameInLowerCase = doctorName.ToLower().Replace(" ","");
                     string doctorRecord = string.Join(",", values.Skip(0)); //  Store entire record
 
-                    doctorIndex[doctorNameByInLowerCase] = doctorRecord;
+                    doctorIndex[doctorNameInLowerCase] = doctorRecord;
                 }
             }
-
             return doctorIndex;
+        }
+
+        static Dictionary<string, string> LoadHospitalIndex(string filepath)
+        {
+            Dictionary<string, string> hospitalIndex = new Dictionary<string, string>();
+
+            using (var reader = new StreamReader(filepath))
+            {
+                while (!reader.EndOfStream)
+                {
+                    var line = reader.ReadLine();
+                    var values = line.Split(',');
+
+                    string hospitalName = values[1];
+                    string hospitalNameInLowerCase = hospitalName.ToLower().Replace(" ", "");
+                    string hospitalRecord = string.Join(",", values.Skip(0));
+
+                    hospitalIndex[hospitalNameInLowerCase] = hospitalRecord;
+                }
+            }
+            return hospitalIndex;
         }
     }
 }
